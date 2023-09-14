@@ -1,0 +1,127 @@
+openapi: 3.0.3
+
+info:
+  title: Album API
+  version: v1
+  description: |
+    相册后端接口。
+
+servers:
+  - url: /v1
+
+tags:
+  - name: Health methods
+    description: |-
+      (TODO)
+  - name: album methods
+    description: |-
+      (TODO)
+
+x-tagGroups:
+  - name: Methods
+    tags:
+      - Health methods
+
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health methods
+      summary: Get service status
+      description: |-
+        查询服务是否正常运行
+      operationId: getHealthServices
+      responses:
+        "200":
+          description: 成功返回
+          content:
+            application/json:        
+              schema:
+                type: string
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+  /files:
+    get:
+      tags:
+        - album methods
+      summary: 获取随机文件信息
+      description: |-
+        获取随机文件信息，包括图片，视频，音乐等
+      operationId: getFiles
+      parameters:
+        - name: type
+          in: query
+          description: 获取数据的类型
+          example: "random"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/GetImagesOK"
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+  /file:
+    get:
+      tags:
+        - album methods
+      summary: 获取二进制文件
+      description: |-
+        获取文件的二进制数据
+      operationId: getFileInfo
+      parameters:
+        - name: path
+          in: query
+          description: Folder path
+          example: "/DATA/a.jpg"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 成功返回图片
+          content:
+            application/octet-stream:        
+              schema:
+                type: string
+                format: binary
+        "500":
+          $ref: "#/components/responses/ResponseInternalServerError"
+
+components:
+  responses:
+
+    ResponseInternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BaseResponse"
+
+    GetImagesOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Files"
+
+
+  schemas:
+    BaseResponse:
+      properties:
+        message:
+          readOnly: true
+          description: message returned by server side if there is any
+          type: string
+          example: ""
+
+    Files:
+      properties:
+        url:
+          type: string
+          example: "http://www.baidu.com"
+        size:
+          type: integer
+          example: 200
