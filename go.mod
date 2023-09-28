@@ -1,6 +1,6 @@
 module Album-Backend
 
-go 1.21.1
+go 1.20
 
 require (
 	github.com/deepmap/oapi-codegen v1.15.0
